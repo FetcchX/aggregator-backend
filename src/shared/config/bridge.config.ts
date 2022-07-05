@@ -156,7 +156,7 @@ export const bridges: Bridge[] = [
 				return fees;
 			} catch (e) {
 				console.log(e, "HYPHENNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNN");
-				throw e;
+				return e
 			}
 		},
 	},
