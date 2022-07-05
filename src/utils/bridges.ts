@@ -10,7 +10,7 @@ import {
 	Routes,
 	CoinKey,
 	coinEnum,
-} from "../../../vision";
+} from "@wagpay/types";
 import { ethers } from "ethers";
 import HopProvider from "./bridges/HopProvider";
 import HyphenProvider from "./bridges/HyphenProvider";

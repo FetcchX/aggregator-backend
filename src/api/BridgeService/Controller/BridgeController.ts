@@ -13,7 +13,7 @@ import {
 	coinEnum,
 	chainEnum,
 	AllowDenyPrefer,
-} from "../../../../../vision";
+} from "@wagpay/types";
 import { bridges } from "@shared/config";
 
 const bridgex = new Bridges();
