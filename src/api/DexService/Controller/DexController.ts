@@ -12,7 +12,7 @@ class DexController {
 		const fromToken = tokens[chainId as string][fromTokenAddress as string]
 		const toToken = tokens[chainId as string][toTokenAddress as string]
 
-		const uniswapData = await uniswap._getUniswapRoute(fromToken, toToken, Number(amount))
+		const uniswapData = await uniswap.getUniswapRoute(fromToken, toToken, Number(amount))
 
 		res.status(200).send(uniswapData)
 	}

@@ -11,6 +11,3 @@ bridgeRouter.get("/best-route", (req: Request, res: Response) =>
 bridgeRouter.get("/execute-best-route", (req: Request, res: Response) =>
 	bridgeController.executeBridge(req, res)
 );
-bridgeRouter.get("/test", (req: Request, res: Response) =>
-	bridgeController.test(req, res)
-);

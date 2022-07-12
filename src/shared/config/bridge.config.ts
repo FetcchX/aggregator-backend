@@ -507,19 +507,3 @@ export const bridges: Bridge[] = [
 		},
 	},
 ];
-
-export const dexes: Dex[] = [
-	{
-		logoUri: "",
-		name: DexId.Uniswap,
-		contract: "0xf9Eb876d23DEA670f984c9F2A52c8B51De67157d",
-		supported_chains: [ChainId.ETH, ChainId.POL],
-		supported_coins: [
-			CoinKey.MATIC,
-			CoinKey.ETH,
-			CoinKey.USDC,
-			CoinKey.USDT,
-			CoinKey.DAI,
-		],
-	},
-];
