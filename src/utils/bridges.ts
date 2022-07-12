@@ -12,14 +12,10 @@ import {
 	coinEnum,
 } from "@wagpay/types";
 import { ethers } from "ethers";
-import HopProvider from "./bridges/HopProvider";
-import HyphenProvider from "./bridges/HyphenProvider";
 import UniswapProvider from "./dexes/UniswapProvider";
 import { bridges, Dex, dexes } from "@shared/config";
 
-const hyphen = new HyphenProvider();
 const uniswap = new UniswapProvider();
-const hop = new HopProvider();
 
 interface AlgoOptimize {
 	gas?: boolean;
@@ -36,44 +32,6 @@ class Bridges {
 			throw "No Route Found";
 		}
 		return routes;
-	};
-
-	getRouteFees = async (
-		route: any,
-		fromChain: number,
-		toChain: number,
-		fromToken: Token,
-		toToken: Token,
-		amount: any
-	) => {
-		if (route.name === "HYPHEN") {
-			try {
-				const fees = await hyphen.getTransferFees(
-					fromChain,
-					toChain,
-					fromToken,
-					amount
-				);
-				return fees;
-			} catch (E) {
-				throw E;
-			}
-		} else {
-			const fees = await hop.getTransferFees(
-				fromChain,
-				toChain,
-				fromToken,
-				amount
-			);
-			return fees;
-			// let fees = {
-			// 	gas: 0,
-			// 	amountToGet: 0,
-			// 	transferFee: 0,
-			// 	transferFeePerc: 0
-			// }
-			// return fees
-		}
 	};
 
 	bestBridgeV2 = async (
@@ -168,13 +126,13 @@ class Bridges {
 						toToken2,
 						uniswapRequired
 							? ethers.utils
-									.parseUnits(
-										route.uniswapData.amountToGet.toFixed(
-											2
-										),
-										toTToken2.decimals
-									)
-									.toString()
+								.parseUnits(
+									route.uniswapData.amountToGet.toFixed(
+										2
+									),
+									toTToken2.decimals
+								)
+								.toString()
 							: amount
 					)
 					.then((fees) => {
@@ -287,156 +245,38 @@ class Bridges {
 		}
 	};
 
-	bestBridge = async (
-		fromChainId: string,
-		toChainId: string,
-		fromTokenAddress: string,
-		toTokenAddress: string,
-		amount: string,
-		bridge?: AllowDenyPrefer,
-		dex?: AllowDenyPrefer
-	): Promise<Array<any>> => {
+	bestDex = async (
+		fromChain: ChainId,
+		fromToken: CoinKey,
+		toToken: CoinKey,
+		amount: string
+	) => {
 		return new Promise(async (resolve, reject) => {
-			const fromChain = fromChainId as chainsSupported;
-			const toChain = toChainId as chainsSupported;
-			const fromTokenA = fromTokenAddress as string;
-			const toTokenA = toTokenAddress as string;
+			try {
+				let list = []
 
-			const fromToken: Token = tokens[fromChain][fromTokenA];
-			const toToken: Token = tokens[toChain][toTokenA];
-			// console.log(
-			// 	fromToken,
-			// 	toToken,
-			// 	fromChain,
-			// 	fromTokenA,
-			// 	toChain,
-			// 	toTokenA
-			// );
-			const UNISWAP_REQUIRED = fromToken.name !== toToken.name;
+				const supported_dexes = dexes.filter(dex => (dex.supported_chains.includes(fromChain) && (dex.supported_coins.includes(fromToken) && dex.supported_coins.includes(toToken))))
 
-			const routes = this.getRoutes(fromChain, fromToken, toChain);
+				for (let i = 0; i < supported_dexes.length; i++) {
+					const dex = supported_dexes[i]
 
-			if (UNISWAP_REQUIRED) {
-				const uniswapRoute = await uniswap.getUniswapRoute(
-					fromToken,
-					toToken,
-					Number(
-						ethers.utils
-							.formatUnits(amount, fromToken.decimals)
-							.toString()
+					const fees = await dex.getTransferFees(
+						fromChain,
+						fromToken,
+						toToken,
+						Number(amount)
 					)
-				);
 
-				for (let i = 0; i < routes.length; i++) {
-					var fees: any;
-					try {
-						fees = await this.getRouteFees(
-							routes[i],
-							Number(fromChain),
-							Number(toChain),
-							uniswapRoute.toToken,
-							toToken,
-							ethers.utils.parseUnits(
-								uniswapRoute.amountToGet.toFixed(3).toString(),
-								uniswapRoute.toToken.decimals
-							)
-						);
-					} catch (e) {
-						reject(e);
-					}
-					routes[i].gasFees = fees.gasFees;
-					routes[i].amountToGet = fees["amountToGet"];
-					routes[i].transferFee = fees["transferFee"];
-					routes[i].uniswapData = uniswapRoute;
-					routes[i].route = {
-						fromChain: fromChain,
-						toChain: toChain,
-						fromToken: uniswapRoute.toToken,
-						toToken: toToken,
-						amount: uniswapRoute.amountToGet,
-					};
+					list.push(fees)
 				}
 
-				let sorted: Array<any> = routes
-					.slice()
-					.sort((x: any, y: any) => {
-						if (Number(x.amountToGet) < Number(y.amountToGet)) {
-							return 1;
-						} else if (Number(x.gasFees) < Number(y.gasFees)) {
-							return 1;
-						} else {
-							return -1;
-						}
-					});
-
-				const length = sorted.length;
-
-				if (bridge) {
-					for (let i = 0; i < length; i++) {
-						// console.log(sorted.length, routes.length);
-						if (
-							bridge?.prefer?.includes(
-								sorted[i].name.toLowerCase()
-							)
-						) {
-							const sort = sorted[i];
-							sorted.splice(i, 1);
-							sorted.unshift(sort);
-						} else if (
-							bridge?.deny?.includes(sorted[i].name.toLowerCase())
-						) {
-							sorted.splice(i, 1);
-						}
-					}
-				}
-
-				resolve(sorted);
-			} else {
-				for (let i = 0; i < routes.length; i++) {
-					var fees: any;
-					try {
-						fees = await this.getRouteFees(
-							routes[i],
-							Number(fromChain),
-							Number(toChain),
-							fromToken,
-							toToken,
-							ethers.utils.parseUnits(
-								amount.toString(),
-								fromToken.decimals
-							)
-						);
-					} catch (e) {
-						reject(e);
-					}
-					routes[i].gasFees = fees.gasFees;
-					routes[i].amountToGet = fees["amountToGet"];
-					routes[i].transferFee = fees["transferFee"];
-					routes[i].uniswapFees = 0;
-					routes[i].uniswapData = undefined;
-					routes[i].route = {
-						fromChain: fromChain,
-						toChain: toChain,
-						fromToken: fromToken,
-						toToken: toToken,
-						amount: amount,
-					};
-				}
-
-				const sorted = routes.sort((x: any, y: any) => {
-					if (Number(x.amountToGet) < Number(y.amountToGet)) {
-						return 1;
-					} else if (Number(x.gasFees) < Number(y.gasFees)) {
-						return 1;
-					} else {
-						return -1;
-					}
-				});
-
-				resolve(sorted);
+				resolve(list)
+			} catch (e) {
+				console.error(e)
+				reject(e)
 			}
-		});
-	};
+		})
+	}
 }
 
 export default Bridges;

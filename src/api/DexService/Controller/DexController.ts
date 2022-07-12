@@ -1,20 +1,25 @@
 import tokens from "@shared/tokens"
 import { Request, Response } from "express"
 import UniswapProvider from "@utils/dexes/UniswapProvider"
+import Bridges from "@utils/bridges"
+import { CoinKey } from "@wagpay/types"
 
 const uniswap = new UniswapProvider()
+const bridges = new Bridges()
 
 class DexController {
 
-	bestDex = async (req: Request, res: Response) => {
-		const { chainId, fromTokenAddress, toTokenAddress, amount } = req.query
+	best_dex = async (req: Request, res: Response) => {
+		const { chainId, fromToken, toToken, amount } = req.query
 
-		const fromToken = tokens[chainId as string][fromTokenAddress as string]
-		const toToken = tokens[chainId as string][toTokenAddress as string]
+		const data = await bridges.bestDex(
+			Number(chainId),
+			fromToken as CoinKey,
+			toToken as CoinKey,
+			amount as string
+		)
 
-		const uniswapData = await uniswap.getUniswapRoute(fromToken, toToken, Number(amount))
-
-		res.status(200).send(uniswapData)
+		res.status(200).send(data)
 	}
 
 }

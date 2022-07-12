@@ -39,14 +39,71 @@ export const dexes: Dex[] = [
 			const from_token = tokens[Number(fromChain)][fromToken]
 			const to_token = tokens[Number(fromChain)][toToken]
 
-			return {
-				dex: dexes[0].contract[fromChain],
+			let uniswapData: UniswapData = {
+				dex: DexId.Uniswap,
 				fees: 0,
-				chainId: Number(fromChain),
+				chainId: Number(from_token.chainId.toString()),
 				fromToken: from_token,
 				toToken: to_token,
-				amountToGet: amount
+				amountToGet: amount,
+			};
+			// console.log(toToken, from_token);
+			if (
+				(from_token.chainAgnositcId.startsWith("USD") &&
+					to_token.chainAgnositcId.startsWith("USD")) ||
+				from_token.chainAgnositcId === to_token.chainAgnositcId
+			) {
+				return uniswapData;
 			}
+
+			const coingeckoName = {
+				MATIC: "matic-network",
+				ETH: "ethereum",
+			};
+
+			var fromTokenPrice;
+
+			if (
+				from_token.chainAgnositcId === "MATIC" ||
+				from_token.chainAgnositcId === "ETH"
+			) {
+				fromTokenPrice = await fetch(
+					`https://api.coingecko.com/api/v3/simple/price?ids=${coingeckoName[from_token.chainAgnositcId]
+					}&vs_currencies=usd`
+				);
+				fromTokenPrice = await fromTokenPrice.json();
+				fromTokenPrice =
+					fromTokenPrice[coingeckoName[from_token.chainAgnositcId]].usd;
+				fromTokenPrice = fromTokenPrice * amount;
+			} else fromTokenPrice = amount;
+
+			if (to_token.chainAgnositcId === "MATIC") {
+				let toTokenPrice: any = await fetch(
+					`https://api.coingecko.com/api/v3/simple/price?ids=matic-network&vs_currencies=usd`
+				);
+				toTokenPrice = await toTokenPrice.json();
+				toTokenPrice = toTokenPrice["matic-network"].usd;
+
+				uniswapData.amountToGet = fromTokenPrice / toTokenPrice;
+				uniswapData.fees =
+					uniswapData.amountToGet * Number(toTokenPrice) * 0.003;
+			} else if (to_token.chainAgnositcId === "ETH") {
+				let toTokenPrice: any = await fetch(
+					`https://api.coingecko.com/api/v3/simple/price?ids=ethereum&vs_currencies=usd`
+				);
+				toTokenPrice = await toTokenPrice.json();
+				toTokenPrice = toTokenPrice["ethereum"].usd;
+
+				uniswapData.amountToGet =
+					(fromTokenPrice - Number(fromTokenPrice) * 0.003) /
+					Number(toTokenPrice);
+				uniswapData.fees = Number(fromTokenPrice) * 0.003;
+			} else if (to_token.chainAgnositcId.startsWith("USD")) {
+				uniswapData.amountToGet =
+					Number(fromTokenPrice) - Number(fromTokenPrice) * 0.003;
+				uniswapData.fees = Number(fromTokenPrice) * 0.003;
+			}
+			return uniswapData;
 		}
 	},
 	{
@@ -68,14 +125,71 @@ export const dexes: Dex[] = [
 			const from_token = tokens[Number(fromChain)][fromToken]
 			const to_token = tokens[Number(fromChain)][toToken]
 
-			return {
-				dex: dexes[0].contract[fromChain],
+			let uniswapData: UniswapData = {
+				dex: DexId.Sushi,
 				fees: 0,
-				chainId: Number(fromChain),
+				chainId: Number(from_token.chainId.toString()),
 				fromToken: from_token,
 				toToken: to_token,
-				amountToGet: amount
+				amountToGet: amount,
+			};
+			// console.log(toToken, from_token);
+			if (
+				(from_token.chainAgnositcId.startsWith("USD") &&
+					to_token.chainAgnositcId.startsWith("USD")) ||
+				from_token.chainAgnositcId === to_token.chainAgnositcId
+			) {
+				return uniswapData;
 			}
+
+			const coingeckoName = {
+				MATIC: "matic-network",
+				ETH: "ethereum",
+			};
+
+			var fromTokenPrice;
+
+			if (
+				from_token.chainAgnositcId === "MATIC" ||
+				from_token.chainAgnositcId === "ETH"
+			) {
+				fromTokenPrice = await fetch(
+					`https://api.coingecko.com/api/v3/simple/price?ids=${coingeckoName[from_token.chainAgnositcId]
+					}&vs_currencies=usd`
+				);
+				fromTokenPrice = await fromTokenPrice.json();
+				fromTokenPrice =
+					fromTokenPrice[coingeckoName[from_token.chainAgnositcId]].usd;
+				fromTokenPrice = fromTokenPrice * amount;
+			} else fromTokenPrice = amount;
+
+			if (to_token.chainAgnositcId === "MATIC") {
+				let toTokenPrice: any = await fetch(
+					`https://api.coingecko.com/api/v3/simple/price?ids=matic-network&vs_currencies=usd`
+				);
+				toTokenPrice = await toTokenPrice.json();
+				toTokenPrice = toTokenPrice["matic-network"].usd;
+
+				uniswapData.amountToGet = fromTokenPrice / toTokenPrice;
+				uniswapData.fees =
+					uniswapData.amountToGet * Number(toTokenPrice) * 0.003;
+			} else if (to_token.chainAgnositcId === "ETH") {
+				let toTokenPrice: any = await fetch(
+					`https://api.coingecko.com/api/v3/simple/price?ids=ethereum&vs_currencies=usd`
+				);
+				toTokenPrice = await toTokenPrice.json();
+				toTokenPrice = toTokenPrice["ethereum"].usd;
+
+				uniswapData.amountToGet =
+					(fromTokenPrice - Number(fromTokenPrice) * 0.003) /
+					Number(toTokenPrice);
+				uniswapData.fees = Number(fromTokenPrice) * 0.003;
+			} else if (to_token.chainAgnositcId.startsWith("USD")) {
+				uniswapData.amountToGet =
+					Number(fromTokenPrice) - Number(fromTokenPrice) * 0.003;
+				uniswapData.fees = Number(fromTokenPrice) * 0.003;
+			}
+			return uniswapData;
 		}
 	}
 ];

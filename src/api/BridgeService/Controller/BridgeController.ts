@@ -46,11 +46,11 @@ class BridgeController {
 		}
 
 		try {
-			const routes = await bridgex.bestBridge(
-				fromChainId.toString(),
-				toChainId.toString(),
-				fromTokenAddress.toString(),
-				toTokenAddress.toString(),
+			const routes = await bridgex.bestBridgeV2(
+				Number(fromChainId),
+				Number(toChainId),
+				fromTokenAddress as CoinKey,
+				toTokenAddress as CoinKey,
 				amount.toString()
 			);
 			const route = routes[0];
