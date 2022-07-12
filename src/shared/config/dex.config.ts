@@ -53,6 +53,8 @@ export const dexes: Dex[] = [
 					to_token.chainAgnositcId.startsWith("USD")) ||
 				from_token.chainAgnositcId === to_token.chainAgnositcId
 			) {
+				uniswapData.fees = amount * 0.003
+				uniswapData.amountToGet = amount - uniswapData.fees
 				return uniswapData;
 			}
 
