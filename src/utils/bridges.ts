@@ -104,6 +104,7 @@ class Bridges {
 				amountToGet: "",
 				transferFee: "",
 				uniswapData: uniswapData as UniswapData,
+				extraData: {},
 				route: {} as RouteResponse,
 			};
 
@@ -138,6 +139,7 @@ class Bridges {
 					.then((fees) => {
 						route.amountToGet = fees.amountToGet;
 						route.transferFee = fees.transferFee;
+						route.extraData = fees.extraData
 
 						routes.push(route);
 					})
