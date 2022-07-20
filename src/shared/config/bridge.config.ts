@@ -22,6 +22,7 @@ export interface FeesInterface {
 	amountToGet: string;
 	transferFee: string;
 	bridgeTime: string;
+	extraData: any;
 }
 
 export interface Bridge {
@@ -75,6 +76,7 @@ export const bridges: Bridge[] = [
 				amountToGet: "",
 				transferFee: "",
 				bridgeTime: "5",
+				extraData: {}
 			};
 
 			const fromTokenAddress = tokens[fromChain as number][fromToken];
@@ -143,6 +145,7 @@ export const bridges: Bridge[] = [
 						amountToGet: data["amountToGet"],
 						transferFee: data["transferFee"],
 						bridgeTime: "2",
+						extraData: {}
 					};
 				} catch (e) {
 					fees = {
@@ -150,6 +153,7 @@ export const bridges: Bridge[] = [
 						amountToGet: "0",
 						transferFee: "0",
 						bridgeTime: "2",
+						extraData: {}
 					};
 				}
 
@@ -189,6 +193,7 @@ export const bridges: Bridge[] = [
 				amountToGet: "",
 				transferFee: "",
 				bridgeTime: "15",
+				extraData: {}
 			};
 
 			const signer = ethers.Wallet.createRandom();
@@ -233,6 +238,9 @@ export const bridges: Bridge[] = [
 							token.decimals
 						),
 						bridgeTime: "10",
+						extraData: {
+							bonderFee: sendData["adjustedBonderFee"]
+						}
 					};
 				} catch (e) {
 					fees = {
@@ -240,6 +248,7 @@ export const bridges: Bridge[] = [
 						amountToGet: "0",
 						transferFee: "0",
 						bridgeTime: "10",
+						extraData: {}
 					};
 				}
 			} catch (e) {
@@ -279,6 +288,7 @@ export const bridges: Bridge[] = [
 				amountToGet: "",
 				transferFee: "",
 				bridgeTime: "20",
+				extraData: {}
 			};
 
 			const fromTokenAddress = tokens[fromChain as number][fromToken];
@@ -310,6 +320,10 @@ export const bridges: Bridge[] = [
 							fromTokenAddress.decimals
 						),
 						bridgeTime: "15",
+						extraData: {
+							nonce: new Date().getTime(),
+							slippage: 5000
+						}
 					};
 				} catch (e) {
 					fees = {
@@ -317,6 +331,7 @@ export const bridges: Bridge[] = [
 						amountToGet: "0",
 						transferFee: "0",
 						bridgeTime: "15",
+						extraData: {}
 					};
 				}
 			} catch (e) {
@@ -354,6 +369,7 @@ export const bridges: Bridge[] = [
 				amountToGet: "",
 				transferFee: "",
 				bridgeTime: "",
+				extraData: {}
 			};
 
 			const fromTokenAddress = tokens[fromChain as number][fromToken];
@@ -420,6 +436,10 @@ export const bridges: Bridge[] = [
 							fromTokenAddress.decimals
 						),
 						bridgeTime: "20",
+						extraData: {
+							relayerFees: data.relayFeePct,
+							quoteTimestamp: data.timestamp
+						}
 					};
 				} catch (e) {
 					console.log("ACROSS ERROR 1");
@@ -428,6 +448,7 @@ export const bridges: Bridge[] = [
 						amountToGet: "0",
 						transferFee: "0",
 						bridgeTime: "15",
+						extraData: {}
 					};
 				}
 				// console.log(fees);
@@ -475,6 +496,7 @@ export const bridges: Bridge[] = [
 				amountToGet: "",
 				transferFee: "",
 				bridgeTime: "",
+				extraData: {}
 			};
 
 			const fromTokenAddress = tokens[fromChain as number][fromToken];
@@ -505,21 +527,5 @@ export const bridges: Bridge[] = [
 
 			return fees;
 		},
-	},
-];
-
-export const dexes: Dex[] = [
-	{
-		logoUri: "",
-		name: DexId.Uniswap,
-		contract: "0xf9Eb876d23DEA670f984c9F2A52c8B51De67157d",
-		supported_chains: [ChainId.ETH, ChainId.POL],
-		supported_coins: [
-			CoinKey.MATIC,
-			CoinKey.ETH,
-			CoinKey.USDC,
-			CoinKey.USDT,
-			CoinKey.DAI,
-		],
 	},
 ];
