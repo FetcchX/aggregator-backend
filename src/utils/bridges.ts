@@ -51,7 +51,7 @@ class Bridges {
 				bridge.supported_coins.includes(toToken)
 		);
 		const supported_dexes = dexes.filter(
-			(dex) =>
+			(dex: any) =>
 				dex.supported_chains.includes(fromChain) &&
 				dex.supported_coins.includes(fromToken) &&
 				dex.supported_coins.includes(toToken)

@@ -322,7 +322,7 @@ export const bridges: Bridge[] = [
 						bridgeTime: "15",
 						extraData: {
 							nonce: new Date().getTime(),
-							slippage: 5000
+							slippage: data["max_slippage"]
 						}
 					};
 				} catch (e) {
