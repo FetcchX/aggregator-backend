@@ -49,7 +49,7 @@ export interface Dex {
 
 export const bridges: Bridge[] = [
 	{
-		logoUri: "",
+		logoUri: "https://raw.githubusercontent.com/WagPay/aggregator-frontend/main/public/images/download.png?token=GHSAT0AAAAAABV7XCKKSW374EFEELSY2TTMYW2NVQQ",
 		name: BridgeId.Hyphen,
 		contract: {
 			1: "0x8F255067135192B7C226821011271F26e627904a",
@@ -165,7 +165,7 @@ export const bridges: Bridge[] = [
 		},
 	},
 	{
-		logoUri: "",
+		logoUri: "https://raw.githubusercontent.com/WagPay/aggregator-frontend/main/public/images/BVcNR51u_400x400.jpg?token=GHSAT0AAAAAABV7XCKLWKUOPZAY2CSO3DUYYW2NTUQ",
 		name: BridgeId.Hop,
 		contract: {
 			1: "",
@@ -259,7 +259,7 @@ export const bridges: Bridge[] = [
 		},
 	},
 	{
-		logoUri: "",
+		logoUri: "https://raw.githubusercontent.com/WagPay/aggregator-frontend/main/public/images/B_whzxUt_400x400.jpg?token=GHSAT0AAAAAABV7XCKKPQYMOCGJ3HXKVK3GYW2N23Q",
 		name: BridgeId.Celer,
 		contract: {
 			1: "",
@@ -342,7 +342,7 @@ export const bridges: Bridge[] = [
 		},
 	},
 	{
-		logoUri: "",
+		logoUri: "https://raw.githubusercontent.com/WagPay/aggregator-frontend/main/public/images/aSjf3j3P_400x400.jpg?token=GHSAT0AAAAAABV7XCKKPNVOVEF5GCUJC3XKYW2N3SA",
 		name: BridgeId.Across,
 		contract: {
 			1: "",
@@ -460,7 +460,7 @@ export const bridges: Bridge[] = [
 		},
 	},
 	{
-		logoUri: "",
+		logoUri: "https://raw.githubusercontent.com/WagPay/aggregator-frontend/main/public/images/uTkJzemg_400x400.png?token=GHSAT0AAAAAABV7XCKKM4HEN5UJ235WZPC6YW2N3FA",
 		name: BridgeId.Connext,
 		contract: {
 			1: "",
