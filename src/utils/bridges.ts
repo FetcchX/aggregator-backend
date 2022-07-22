@@ -99,6 +99,7 @@ class Bridges {
 			const bridge = supported_bridges[i];
 			let route: Routes = {
 				name: bridge.name,
+				logoUri: bridge.logoUri,
 				bridgeTime: "",
 				contractAddress: bridge.contract[fromChain as number],
 				amountToGet: "",
@@ -140,6 +141,7 @@ class Bridges {
 						route.amountToGet = fees.amountToGet;
 						route.transferFee = fees.transferFee;
 						route.extraData = fees.extraData
+						route.bridgeTime = fees.bridgeTime
 
 						routes.push(route);
 					})
