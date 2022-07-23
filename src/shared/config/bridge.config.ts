@@ -11,6 +11,7 @@ export enum BridgeId {
 	Across = "Across",
 	Connext = "Connext",
 	PolygonPOS = "PolygonPOS",
+	Synapse = "Synapse"
 }
 
 export enum DexId {
@@ -526,6 +527,98 @@ export const bridges: Bridge[] = [
 			}
 
 			return fees;
+		},
+	},
+	{
+		logoUri: "https://raw.githubusercontent.com/WagPay/aggregator-frontend/main/public/images/uTkJzemg_400x400.png?token=GHSAT0AAAAAABV7XCKKM4HEN5UJ235WZPC6YW2N3FA",
+		name: BridgeId.PolygonPOS,
+		contract: {
+			1: "",
+			137: "15",
+		},
+		supported_chains: [
+			ChainId.ETH,
+			ChainId.POL
+		],
+		supported_coins: [
+			CoinKey.USDT,
+			CoinKey.USDC,
+			CoinKey.DAI,
+			CoinKey.WETH,
+			CoinKey.WBTC,
+			CoinKey.ETH,
+			CoinKey.MATIC,
+			CoinKey.SUSHI
+		],
+		getTransferFees: async (
+			fromChain: ChainId,
+			toChain: ChainId,
+			fromToken: CoinKey,
+			amount: string
+		): Promise<FeesInterface> => {
+			let token = tokens[fromChain as number][fromToken];
+
+			let fees: FeesInterface = {
+				gasFees: "",
+				amountToGet: "",
+				transferFee: "",
+				bridgeTime: "",
+				extraData: {}
+			};
+
+			return fees
+		},
+	},
+	{
+		logoUri: "https://raw.githubusercontent.com/WagPay/aggregator-frontend/main/public/images/uTkJzemg_400x400.png?token=GHSAT0AAAAAABV7XCKKM4HEN5UJ235WZPC6YW2N3FA",
+		name: BridgeId.Synapse,
+		contract: {
+			1: "",
+			137: "15",
+		},
+		supported_chains: [
+			ChainId.ETH,
+			ChainId.POL,
+			ChainId.BSC,
+			ChainId.AVA
+		],
+		supported_coins: [
+			CoinKey.USDT,
+			CoinKey.USDC,
+			CoinKey.DAI,
+			CoinKey.WETH,
+			CoinKey.WBTC,
+			CoinKey.SUSHI
+		],
+		getTransferFees: async (
+			fromChain: ChainId,
+			toChain: ChainId,
+			fromToken: CoinKey,
+			amount: string
+		): Promise<FeesInterface> => {
+			let token = tokens[fromChain as number][fromToken];
+
+			let fees: FeesInterface = {
+				gasFees: "",
+				amountToGet: "",
+				transferFee: "",
+				bridgeTime: "",
+				extraData: {}
+			};
+
+			const BASE_URL = 'https://syn-api-dev.herokuapp.com/v1/estimate_bridge_output'
+
+			try {
+				const data = await (await fetch(`${BASE_URL}?fromChain=${fromChain}&toChain=${toChain}&fromToken=${token.chainAgnositcId}&toToken=${token.chainAgnositcId}&amountFrom=${amount}`)).json()
+
+				fees.amountToGet = ethers.utils.formatUnits(data.amountToReceive, token.decimals)
+				fees.transferFee = ethers.utils.formatEther(data.bridgeFee)
+
+				return fees
+			} catch (e) {
+				console.log(e)
+				return fees
+			}
 		},
 	},
 ];

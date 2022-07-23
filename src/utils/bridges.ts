@@ -71,15 +71,17 @@ class Bridges {
 
 		if (uniswapRequired) {
 			// console.log(supported_dexes);
+			let dex_data: UniswapData[] = []
 			for (let j = 0; j < supported_dexes.length; j++) {
 				// console.log(
 				// 	amount,
 				// 	tokens[fromChain as number][fromToken.toString()],
 				// 	tokens[fromChain as number][toToken.toString()]
 				// );
-				const uniswapRoute = await uniswap.getUniswapRoute(
-					tokens[fromChain as number][fromToken.toString()],
-					tokens[fromChain as number][toToken.toString()],
+				const uniswapRoute = await supported_dexes[j].getTransferFees(
+					fromChain,
+					fromToken,
+					toToken,
 					Number(
 						ethers.utils
 							.formatUnits(
@@ -91,8 +93,21 @@ class Bridges {
 							.toString()
 					)
 				);
-				uniswapData = uniswapRoute;
+
+				dex_data.push(uniswapRoute)
 			}
+
+			let sorted = dex_data.filter((x: UniswapData, index: number) => {
+				if (!x.amountToGet || Number(x.amountToGet) <= 0) {
+					return false;
+				} else {
+					return true;
+				}
+			});
+
+			console.log(sorted, "sroted")
+
+			uniswapData = sorted[0]
 		}
 
 		for (let i = 0; i < supported_bridges.length; i++) {
