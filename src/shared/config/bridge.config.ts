@@ -50,7 +50,7 @@ export interface Dex {
 
 export const bridges: Bridge[] = [
 	{
-		logoUri: "https://raw.githubusercontent.com/WagPay/aggregator-frontend/main/public/images/download.png?token=GHSAT0AAAAAABV7XCKKSW374EFEELSY2TTMYW2NVQQ",
+		logoUri: "https://raw.githubusercontent.com/chann44/assets-database/main/wagpay/bridge-images/hyphen.png",
 		name: BridgeId.Hyphen,
 		contract: {
 			1: "0x8F255067135192B7C226821011271F26e627904a",
@@ -166,7 +166,7 @@ export const bridges: Bridge[] = [
 		},
 	},
 	{
-		logoUri: "https://raw.githubusercontent.com/WagPay/aggregator-frontend/main/public/images/BVcNR51u_400x400.jpg?token=GHSAT0AAAAAABV7XCKLWKUOPZAY2CSO3DUYYW2NTUQ",
+		logoUri: "https://raw.githubusercontent.com/chann44/assets-database/main/wagpay/bridge-images/hop.jpg",
 		name: BridgeId.Hop,
 		contract: {
 			1: "",
@@ -260,7 +260,7 @@ export const bridges: Bridge[] = [
 		},
 	},
 	{
-		logoUri: "https://raw.githubusercontent.com/WagPay/aggregator-frontend/main/public/images/B_whzxUt_400x400.jpg?token=GHSAT0AAAAAABV7XCKKPQYMOCGJ3HXKVK3GYW2N23Q",
+		logoUri: "https://raw.githubusercontent.com/chann44/assets-database/main/wagpay/bridge-images/celer.jpg",
 		name: BridgeId.Celer,
 		contract: {
 			1: "",
@@ -343,7 +343,7 @@ export const bridges: Bridge[] = [
 		},
 	},
 	{
-		logoUri: "https://raw.githubusercontent.com/WagPay/aggregator-frontend/main/public/images/aSjf3j3P_400x400.jpg?token=GHSAT0AAAAAABV7XCKKPNVOVEF5GCUJC3XKYW2N3SA",
+		logoUri: "https://raw.githubusercontent.com/chann44/assets-database/main/wagpay/bridge-images/aSjf3j3P_400x400.jpg",
 		name: BridgeId.Across,
 		contract: {
 			1: "",
@@ -461,7 +461,7 @@ export const bridges: Bridge[] = [
 		},
 	},
 	{
-		logoUri: "https://raw.githubusercontent.com/WagPay/aggregator-frontend/main/public/images/uTkJzemg_400x400.png?token=GHSAT0AAAAAABV7XCKKM4HEN5UJ235WZPC6YW2N3FA",
+		logoUri: "https://raw.githubusercontent.com/chann44/assets-database/main/wagpay/bridge-images/context.png",
 		name: BridgeId.Connext,
 		contract: {
 			1: "",
