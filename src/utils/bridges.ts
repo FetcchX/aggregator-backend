@@ -5,7 +5,6 @@ import {
 	ChainId,
 	tokens,
 	chainsSupported,
-	UniswapData,
 	RouteResponse,
 	Routes,
 	CoinKey,
@@ -13,7 +12,7 @@ import {
 } from "@wagpay/types";
 import { ethers } from "ethers";
 import UniswapProvider from "./dexes/UniswapProvider";
-import { bridges, Dex, dexes } from "@shared/config";
+import { bridges, Dex, dexes, UniswapData } from "@shared/config";
 
 const uniswap = new UniswapProvider();
 
@@ -78,7 +77,7 @@ class Bridges {
 				// 	tokens[fromChain as number][fromToken.toString()],
 				// 	tokens[fromChain as number][toToken.toString()]
 				// );
-				const uniswapRoute = await supported_dexes[j].getTransferFees(
+				let uniswapRoute = await supported_dexes[j].getTransferFees(
 					fromChain,
 					fromToken,
 					toToken,
@@ -119,7 +118,7 @@ class Bridges {
 				contractAddress: bridge.contract[fromChain as number],
 				amountToGet: "",
 				transferFee: "",
-				uniswapData: uniswapData as UniswapData,
+				uniswapData: uniswapData as any,
 				extraData: {},
 				route: {} as RouteResponse,
 			};

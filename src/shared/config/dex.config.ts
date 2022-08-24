@@ -1,4 +1,4 @@
-import { ChainId, CoinKey, tokens, UniswapData } from "@wagpay/types";
+import { ChainId, CoinKey, Token, tokens } from "@wagpay/types";
 
 enum DexId {
 	Uniswap = "Uniswap",
@@ -7,7 +7,7 @@ enum DexId {
 
 interface Dex {
 	logoUri: string;
-	name: DexId;
+	name: string;
 	contract: { [key: string]: string };
 	supported_chains: ChainId[];
 	supported_coins: CoinKey[];
@@ -17,6 +17,20 @@ interface Dex {
 		toToken: CoinKey,
 		amount: number
 	) => Promise<UniswapData>;
+}
+
+export interface UniswapData {
+	dex: number | string;
+	fees: number;
+	chainId: number;
+	fromToken: Token;
+	toToken: Token;
+	amountToGet: number;
+}
+
+const dexAddress: any = {
+	1: '0x5B353Ce3a3D8Ee1d4684AF349856fB7E8F0fE80D',
+	137: '0x7cbbc355a50e19a58c2d8c24be46eef03093edf7'
 }
 
 export const dexes: Dex[] = [
@@ -40,7 +54,7 @@ export const dexes: Dex[] = [
 			const to_token = tokens[Number(fromChain)][toToken]
 
 			let uniswapData: UniswapData = {
-				dex: DexId.Uniswap,
+				dex: dexAddress[Number(fromChain)],
 				fees: 0,
 				chainId: Number(from_token.chainId.toString()),
 				fromToken: from_token,
@@ -128,7 +142,7 @@ export const dexes: Dex[] = [
 			const to_token = tokens[Number(fromChain)][toToken]
 
 			let uniswapData: UniswapData = {
-				dex: DexId.Sushi,
+				dex: dexAddress[Number(fromChain)],
 				fees: 0,
 				chainId: Number(from_token.chainId.toString()),
 				fromToken: from_token,
